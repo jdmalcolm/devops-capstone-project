@@ -172,3 +172,14 @@ class TestAccountService(TestCase):
         dummy_account = AccountFactory()
         resp = self.client.put(f"{BASE_URL}/0", json=dummy_account.serialize())
         self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
+    
+    def test_delete_account(self):
+        """It should Delete and Account"""
+        account = self._create_accounts(1)[0]
+        resp = self.client.delete(f"{BASE_URL}/{account.id}")
+        self.assertEqual(resp.status_code, status.HTTP_204_NO_CONTENT)
+    
+    def test_method_not_allowed(self):
+        """It should throw 405 on not-allowed method"""
+        resp = self.client.delete(BASE_URL)
+        self.assertEqual(resp.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
